@@ -11,8 +11,14 @@
 # 1. Cài đặt công cụ, môi trường và các thư viện cần thiết
 
 ## 1.1. Clone project.
+```
 git clone https://gitlab.com/anhlta/odoo-fitdnu.git
+```
+
+```
 git checkout cntt15_01
+```
+
 
 ## 1.2. cài đặt các thư viện cần thiết
 
