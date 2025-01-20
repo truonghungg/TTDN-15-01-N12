@@ -12,5 +12,23 @@
             sequence="1"
             action="action_nhan_vien"
         />
+        <menuitem name="Danh mục đơn vị" 
+            id="menu_don_vi" 
+            parent="menu_root" 
+            sequence="2"
+            action="action_don_vi"
+        />
+        <menuitem name="Danh mục chức vụ" 
+            id="menu_chuc_vu" 
+            parent="menu_root" 
+            sequence="3"
+            action="action_chuc_vu"
+        />
+        <menuitem name="Lịch sử công tác" 
+            id="menu_lich_su_cong_tac" 
+            parent="menu_root" 
+            sequence="4"
+            action="action_lich_su_cong_tac"
+        />
     </data>
 </odoo>
