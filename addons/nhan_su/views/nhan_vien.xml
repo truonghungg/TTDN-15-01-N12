@@ -12,8 +12,10 @@
                             <field name="ma_dinh_danh"/>
                             <field name="ho_va_ten"/>
                             <field name="ngay_sinh"/>
+                            <field name="tuoi"/>
                             <field name="que_quan"/>
                             <field name="email"/>
+                            <field name="anh" widget="image"/>
                         </group>
                         <notebook>
                             <page string="Danh sách lịch sử công tác">
@@ -34,6 +36,7 @@
                     <field name="ma_dinh_danh"/>
                     <field name="ho_va_ten"/>
                     <field name="ngay_sinh"/>
+                    <field name="tuoi"/>
                     <field name="que_quan"/>
                     <field name="email"/>
                 </tree>
@@ -47,6 +50,7 @@
                     <field name="ma_dinh_danh"/>
                     <field name="ho_va_ten"/>
                     <field name="ngay_sinh"/>
+                    <field name="tuoi"/>
                     <field name="que_quan"/>
                     <field name="email"/>
                 </search>

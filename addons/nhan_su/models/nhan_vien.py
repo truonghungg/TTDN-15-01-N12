@@ -1,5 +1,5 @@
 from odoo import models, fields, api
-
+from datetime import date
 
 class NhanVien(models.Model):
     _name = 'nhan_vien'
@@ -16,3 +16,13 @@ class NhanVien(models.Model):
         "lich_su_cong_tac", 
         inverse_name="nhan_vien_id", 
         string = "Danh sách lịch sử công tác")
+    tuoi = fields.Integer("Tuổi", compute="_compute_tinh_tuoi", store=True)
+    anh = fields.Binary("Ảnh")
+    
+    @api.depends("ngay_sinh")
+    def _compute_tinh_tuoi(self):
+        for record in self:
+            if record.ngay_sinh:
+                year_now = date.today().year
+                record.tuoi = year_now - record.ngay_sinh.year
+                # record.tuoi = record.ngay_sinh
