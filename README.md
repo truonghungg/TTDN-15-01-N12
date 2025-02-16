@@ -41,7 +41,7 @@ pip3 install -r requirements.txt
 
 Khởi tạo database trên docker bằng việc thực thi file dockercompose.yml.
 
-`docker-compose up -d`
+`sudo docker-compose up -d`
 
 # 3. Setup tham số chạy cho hệ thống
 
