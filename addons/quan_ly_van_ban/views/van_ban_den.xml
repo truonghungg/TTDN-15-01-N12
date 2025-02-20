@@ -10,6 +10,9 @@
                         <div class="oe_read_only" style="font-size:25px">Văn bản đến</div>
                         <group col="4" string="Thông tin chung">
                             <field name="ten_van_ban"/>
+                            <field name="so_van_ban_den"/>
+                            <field name="so_hieu_van_ban"/>
+                            <field name="noi_gui_den"/>
                         </group>
                     </sheet>
                     
@@ -23,6 +26,9 @@
             <field name="arch" type="xml">
                 <tree>
                     <field name="ten_van_ban"/>
+                    <field name="so_van_ban_den"/>
+                    <field name="so_hieu_van_ban"/>
+                    <field name="noi_gui_den"/>
                 </tree>
             </field>
         </record>
@@ -32,6 +38,9 @@
             <field name="arch" type="xml">
                 <search>
                     <field name="ten_van_ban"/>
+                    <field name="so_van_ban_den"/>
+                    <field name="so_hieu_van_ban"/>
+                    <field name="noi_gui_den"/>
                 </search>
             </field>
         </record>

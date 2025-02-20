@@ -29,7 +29,22 @@ class NhanVien(models.Model):
         "danh_sach_chung_chi_bang_cap", 
         inverse_name="nhan_vien_id", 
         string = "Danh sách chứng chỉ bằng cấp")
+    so_nguoi_bang_tuoi = fields.Integer("Số người bằng tuổi", 
+                                        compute="so_nguoi_bang_tuoi",
+                                        store=True
+                                        )
     
+    @api.depends("tuoi")
+    def _compute_so_nguoi_bang_tuoi(self):
+        for record in self:
+            if record.tuoi:
+                records = self.env['nhan_vien'].search(
+                    [
+                        ('tuoi', '=', record.tuoi),
+                        ('ma_dinh_danh', '!=', record.ma_dinh_danh)
+                    ]
+                )
+                record.so_nguoi_bang_tuoi = len(records)
     _sql_constrains = [
         ('ma_dinh_danh_unique', 'unique(ma_dinh_danh)', 'Mã định danh phải là duy nhất')
     ]
@@ -40,6 +55,9 @@ class NhanVien(models.Model):
             if record.ho_ten_dem and record.ten:
                 record.ho_va_ten = record.ho_ten_dem + ' ' + record.ten
     
+    
+    
+                
     @api.onchange("ten", "ho_ten_dem")
     def _default_ma_dinh_danh(self):
         for record in self:

@@ -25,7 +25,9 @@
     # always loaded
     'data': [
         'security/ir.model.access.csv',
-        'views/nhan_vien.xml',
+        'views/van_ban_den.xml',
+        'views/van_ban_di.xml',
+        'views/loai_van_ban.xml',
         'views/menu.xml',
     ],
     # only loaded in demonstration mode

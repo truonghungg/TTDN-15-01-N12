@@ -15,6 +15,7 @@
                             <field name="ma_dinh_danh"/>
                             <field name="ngay_sinh"/>
                             <field name="tuoi"/>
+                            <field name="so_nguoi_bang_tuoi"/>
                             <field name="que_quan"/>
                             <field name="email"/>
                             <field name="anh" widget="image"/>
@@ -44,6 +45,7 @@
                     <field name="ho_va_ten"/>
                     <field name="ngay_sinh"/>
                     <field name="tuoi"/>
+                    <field name="so_nguoi_bang_tuoi"/>
                     <field name="que_quan"/>
                     <field name="email"/>
                 </tree>
