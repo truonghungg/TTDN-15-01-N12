@@ -1,0 +1,151 @@
+<odoo>
+    <!-- Định nghĩa action trước -->
+    <record id="action_customer" model="ir.actions.act_window">
+        <field name="name">Customers</field>
+        <field name="res_model">customer.management.customer</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Định nghĩa menu root trước -->
+    <menuitem id="menu_customer_root" name="Customer Management"/>
+
+    <!-- Sử dụng action và menu root trong menuitem -->
+    <menuitem id="menu_customer" name="Customers" parent="menu_customer_root" action="action_customer"/>
+
+    <odoo>
+        <!-- Customer Tree View -->
+        <record id="view_customer_tree" model="ir.ui.view">
+            <field name="name">customer.management.customer.tree</field>
+            <field name="model">customer.management.customer</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="phone"/>
+                    <field name="email"/>
+                    <field name="is_potential"/>
+                    <field name="needs_care"/>
+                    <field name="next_care_date"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Customer Form View -->
+        <record id="view_customer_form" model="ir.ui.view">
+            <field name="name">customer.management.customer.form</field>
+            <field name="model">customer.management.customer</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="%(khach_hang.action_create_care)d" string="Schedule Care" type="action" class="oe_highlight" 
+                                context="{'default_customer_id': active_id}"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="%(khach_hang.action_customer_orders)d" type="action" class="oe_stat_button" icon="fa-shopping-cart">
+                                <field name="order_count" widget="statinfo" string="Orders"/>
+                            </button>
+                            <button name="%(khach_hang.action_customer_care)d" type="action" class="oe_stat_button" icon="fa-heart">
+                                <field name="care_count" widget="statinfo" string="Care"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" placeholder="Customer Name"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="phone"/>
+                                <field name="email"/>
+                                <field name="address"/>
+                            </group>
+                            <group>
+                                <field name="is_potential"/>
+                                <field name="interested_product_type" attrs="{'invisible': [('is_potential', '=', False)]}"/>
+                                <field name="source" attrs="{'invisible': [('is_potential', '=', False)]}"/>
+                                <field name="needs_care"/>
+                                <field name="last_care_date"/>
+                                <field name="next_care_date"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Orders" name="orders">
+                                <field name="order_ids">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="date_order"/>
+                                        <field name="total_amount"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Care History" name="care_history">
+                                <field name="care_ids">
+                                    <tree>
+                                        <field name="care_date"/>
+                                        <field name="staff_id"/>
+                                        <field name="contact_method"/>
+                                        <field name="follow_up_needed"/>
+                                        <field name="follow_up_date"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Feedback" name="feedback">
+                                <field name="feedback_ids">
+                                    <tree>
+                                        <field name="date_feedback"/>
+                                        <field name="feedback_type"/>
+                                        <field name="rating"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Inquiries" name="inquiries">
+                                <field name="inquiry_ids">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="date_asked"/>
+                                        <field name="support_staff_id"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Customer Search View -->
+        <record id="view_customer_search" model="ir.ui.view">
+            <field name="name">customer.management.customer.search</field>
+            <field name="model">customer.management.customer</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="phone"/>
+                    <field name="email"/>
+                    <filter string="Potential Customers" name="potential" domain="[('is_potential', '=', True)]"/>
+                    <filter string="Needs Care" name="needs_care" domain="[('needs_care', '=', True)]"/>
+                    <filter string="Care Due Today" name="care_today" domain="[('next_care_date', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Interested Product Type" name="group_by_product_type" context="{'group_by': 'interested_product_type'}"/>
+                        <filter string="Lead Source" name="group_by_source" context="{'group_by': 'source'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Customer Action -->
+        <record id="action_customers" model="ir.actions.act_window">
+            <field name="name">Customers</field>
+            <field name="res_model">customer.management.customer</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first customer!
+                </p>
+            </field>
+        </record>
+    </odoo>
+</odoo>

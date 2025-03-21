@@ -1,0 +1,95 @@
+<odoo>
+    <!-- Feedback Tree View -->
+    <record id="view_feedback_tree" model="ir.ui.view">
+        <field name="name">customer.management.feedback.tree</field>
+        <field name="model">customer.management.feedback</field>
+        <field name="arch" type="xml">
+            <tree decoration-info="state=='new'" decoration-warning="state=='in_progress'" decoration-success="state=='responded'" decoration-muted="state=='closed'">
+                <field name="customer_id"/>
+                <field name="product_id"/>
+                <field name="date_feedback"/>
+                <field name="feedback_type"/>
+                <field name="rating"/>
+                <field name="staff_id"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Feedback Form View -->
+    <record id="view_feedback_form" model="ir.ui.view">
+        <field name="name">customer.management.feedback.form</field>
+        <field name="model">customer.management.feedback</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_in_progress" string="Mark In Progress" type="object" states="new" class="oe_highlight"/>
+                    <button name="action_respond" string="Mark Responded" type="object" states="in_progress" class="oe_highlight"/>
+                    <button name="action_close" string="Close" type="object" states="responded" class="oe_highlight"/>
+                    <field name="state" widget="statusbar" statusbar_visible="new,in_progress,responded,closed"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="customer_id"/>
+                            <field name="product_id"/>
+                            <field name="order_id"/>
+                            <field name="date_feedback"/>
+                        </group>
+                        <group>
+                            <field name="feedback_type"/>
+                            <field name="rating" widget="priority"/>
+                            <field name="staff_id"/>
+                            <field name="date_response" attrs="{'invisible': [('date_response', '=', False)]}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Feedback Content" name="content">
+                            <field name="content" placeholder="Customer feedback details..."/>
+                        </page>
+                        <page string="Response" name="response" attrs="{'invisible': [('state', 'in', ['new'])]}">
+                            <field name="response" placeholder="Your response to the customer..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Feedback Search View -->
+    <record id="view_feedback_search" model="ir.ui.view">
+        <field name="name">customer.management.feedback.search</field>
+        <field name="model">customer.management.feedback</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="customer_id"/>
+                <field name="product_id"/>
+                <field name="feedback_type"/>
+                <filter string="New" name="new" domain="[('state', '=', 'new')]"/>
+                <filter string="In Progress" name="in_progress" domain="[('state', '=', 'in_progress')]"/>
+                <filter string="Responded" name="responded" domain="[('state', '=', 'responded')]"/>
+                <filter string="Closed" name="closed" domain="[('state', '=', 'closed')]"/>
+                <filter string="High Rating (4-5)" name="high_rating" domain="[('rating', 'in', ['4', '5'])]"/>
+                <filter string="Low Rating (1-2)" name="low_rating" domain="[('rating', 'in', ['1', '2'])]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Customer" name="group_by_customer" context="{'group_by': 'customer_id'}"/>
+                    <filter string="Product" name="group_by_product" context="{'group_by': 'product_id'}"/>
+                    <filter string="Feedback Type" name="group_by_type" context="{'group_by': 'feedback_type'}"/>
+                    <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Feedback Action -->
+    <record id="action_feedback" model="ir.actions.act_window">
+        <field name="name">Customer Feedback</field>
+        <field name="res_model">customer.management.feedback</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first customer feedback!
+            </p>
+        </field>
+    </record>
+</odoo>

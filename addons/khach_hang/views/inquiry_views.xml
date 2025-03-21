@@ -1,0 +1,103 @@
+<odoo>
+    <!-- Inquiry Tree View -->
+    <record id="view_inquiry_tree" model="ir.ui.view">
+        <field name="name">customer.management.inquiry.tree</field>
+        <field name="model">customer.management.inquiry</field>
+        <field name="arch" type="xml">
+            <tree decoration-info="state=='new'" decoration-warning="state=='in_progress'" decoration-success="state=='answered'" decoration-muted="state=='closed'">
+                <field name="name"/>
+                <field name="customer_id"/>
+                <field name="date_asked"/>
+                <field name="support_staff_id"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Inquiry Form View -->
+    <record id="view_inquiry_form" model="ir.ui.view">
+        <field name="name">customer.management.inquiry.form</field>
+        <field name="model">customer.management.inquiry</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_in_progress" string="Mark In Progress" type="object" states="new" class="oe_highlight"/>
+                    <button name="action_answer" string="Mark Answered" type="object" states="in_progress" class="oe_highlight"/>
+                    <button name="action_close" string="Close" type="object" states="answered" class="oe_highlight"/>
+                    <field name="state" widget="statusbar" statusbar_visible="new,in_progress,answered,closed"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Inquiry Subject"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="customer_id"/>
+                            <field name="date_asked"/>
+                            <field name="inquiry_type"/>
+                        </group>
+                        <group>
+                            <field name="support_staff_id"/>
+                            <field name="date_answered" attrs="{'invisible': [('date_answered', '=', False)]}"/>
+                            <field name="related_product_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Question" name="question">
+                            <field name="question" placeholder="Customer inquiry details..."/>
+                        </page>
+                        <page string="Answer" name="answer" attrs="{'invisible': [('state', 'in', ['new'])]}">
+                            <field name="answer" placeholder="Your answer to the customer..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Inquiry Search View -->
+    <record id="view_inquiry_search" model="ir.ui.view">
+        <field name="name">customer.management.inquiry.search</field>
+        <field name="model">customer.management.inquiry</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="customer_id"/>
+                <field name="support_staff_id"/>
+                <filter string="New" name="new" domain="[('state', '=', 'new')]"/>
+                <filter string="In Progress" name="in_progress" domain="[('state', '=', 'in_progress')]"/>
+                <filter string="Answered" name="answered" domain="[('state', '=', 'answered')]"/>
+                <filter string="Closed" name="closed" domain="[('state', '=', 'closed')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Customer" name="group_by_customer" context="{'group_by': 'customer_id'}"/>
+                    <filter string="Support Staff" name="group_by_staff" context="{'group_by': 'support_staff_id'}"/>
+                    <filter string="Inquiry Type" name="group_by_type" context="{'group_by': 'inquiry_type'}"/>
+                    <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Inquiry Action -->
+    <record id="action_inquiry" model="ir.actions.act_window">
+        <field name="name">Customer Inquiries</field>
+        <field name="res_model">customer.management.inquiry</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first customer inquiry!
+            </p>
+        </field>
+    </record>
+
+    <!-- Customer Inquiry Action -->
+    <record id="action_customer_inquiry" model="ir.actions.act_window">
+        <field name="name">Customer Inquiries</field>
+        <field name="res_model">customer.management.inquiry</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('customer_id', '=', active_id)]</field>
+        <field name="context">{'default_customer_id': active_id}</field>
+    </record>
+</odoo>

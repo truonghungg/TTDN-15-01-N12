@@ -1,0 +1,43 @@
+<odoo>
+    <!-- Định nghĩa action trước -->
+    <record id="action_product" model="ir.actions.act_window">
+        <field name="name">Products</field>
+        <field name="res_model">customer.management.product</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Định nghĩa menu root trước -->
+    <menuitem id="menu_customer_root" name="Customer Management"/>
+
+    <!-- Sử dụng action và menu root trong menuitem -->
+    <menuitem id="menu_product" name="Products" parent="menu_customer_root" action="action_product"/>
+
+    <!-- Định nghĩa view cho product -->
+    <record id="view_product_tree" model="ir.ui.view">
+        <field name="name">product.tree</field>
+        <field name="model">customer.management.product</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="description"/>
+                <field name="price"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_product_form" model="ir.ui.view">
+        <field name="name">product.form</field>
+        <field name="model">customer.management.product</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="description"/>
+                        <field name="price"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

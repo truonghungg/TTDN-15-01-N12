@@ -1,0 +1,73 @@
+<odoo>
+    <!-- Potential Customer Tree View -->
+    <record id="view_potential_customer_tree" model="ir.ui.view">
+        <field name="name">customer.management.potential.tree</field>
+        <field name="model">customer.management.potential</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="customer_id"/>
+                <field name="product_interest"/>
+                <field name="probability"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Potential Customer Form View -->
+    <record id="view_potential_customer_form" model="ir.ui.view">
+        <field name="name">customer.management.potential.form</field>
+        <field name="model">customer.management.potential</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="customer_id"/>
+                            <field name="product_interest"/>
+                        </group>
+                        <group>
+                            <field name="probability" widget="percentage"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Notes" name="notes">
+                            <field name="notes" placeholder="Additional notes about potential customer..."/>
+                        </page>
+                        <page string="Actions" name="actions">
+                            <field name="actions" placeholder="Actions to convert this potential customer..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Potential Customer Search View -->
+    <record id="view_potential_customer_search" model="ir.ui.view">
+        <field name="name">customer.management.potential.search</field>
+        <field name="model">customer.management.potential</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="customer_id"/>
+                <field name="product_interest"/>
+                <filter string="High Probability (>70%)" name="high_probability" domain="[('probability', '>=', 70)]"/>
+                <filter string="Medium Probability (30-70%)" name="medium_probability" domain="[('probability', '>=', 30), ('probability', '<', 70)]"/>
+                <filter string="Low Probability (<30%)" name="low_probability" domain="[('probability', '<', 30)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Customer" name="group_by_customer" context="{'group_by': 'customer_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Potential Customer Action -->
+    <record id="action_potential_customer" model="ir.actions.act_window">
+        <field name="name">Potential Customers</field>
+        <field name="res_model">customer.management.potential</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first potential customer!
+            </p>
+        </field>
+    </record>
+</odoo>

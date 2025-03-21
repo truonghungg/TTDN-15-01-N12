@@ -1,0 +1,26 @@
+<!-- customer_management/views/templates.xml -->
+<template id="customer_list_template">
+    <t t-call="web.layout">
+        <div class="container">
+            <h1>Customer List</h1>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="customers" t-as="customer">
+                        <tr>
+                            <td><t t-esc="customer.name"/></td>
+                            <td><t t-esc="customer.email"/></td>
+                            <td><t t-esc="customer.phone"/></td>
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+        </div>
+    </t>
+</template>

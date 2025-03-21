@@ -1,0 +1,135 @@
+<odoo>
+    <!-- Định nghĩa action trước -->
+    <record id="action_order" model="ir.actions.act_window">
+        <field name="name">Orders</field>
+        <field name="res_model">customer.management.order</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Định nghĩa menu root trước -->
+    <menuitem id="menu_customer_root" name="Customer Management"/>
+
+    <!-- Sử dụng action và menu root trong menuitem -->
+    <menuitem id="menu_order" name="Orders" parent="menu_customer_root" action="action_order"/>
+
+    <odoo>
+        <!-- Order Tree View -->
+        <record id="view_order_tree" model="ir.ui.view">
+            <field name="name">customer.management.order.tree</field>
+            <field name="model">customer.management.order</field>
+            <field name="arch" type="xml">
+                <tree decoration-info="state=='draft'" decoration-success="state=='done'" decoration-warning="state=='confirmed'" decoration-danger="state=='cancelled'">
+                    <field name="name"/>
+                    <field name="customer_id"/>
+                    <field name="date_order"/>
+                    <field name="total_amount"/>
+                    <field name="state"/>
+                    <field name="care_needed"/>
+                    <field name="care_date"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Order Form View -->
+        <record id="view_order_form" model="ir.ui.view">
+            <field name="name">customer.management.order.form</field>
+            <field name="model">customer.management.order</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_confirm" string="Confirm" type="object" states="draft" class="oe_highlight"/>
+                        <button name="action_done" string="Mark Done" type="object" states="confirmed" class="oe_highlight"/>
+                        <button name="action_cancel" string="Cancel" type="object" states="draft,confirmed"/>
+                        <button name="action_request_feedback" string="Request Feedback" type="object" states="done" attrs="{'invisible': [('feedback_requested', '=', True)]}"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,done"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="customer_id"/>
+                                <field name="date_order"/>
+                            </group>
+                            <group>
+                                <field name="total_amount" widget="monetary"/>
+                                <field name="feedback_requested" invisible="1"/>
+                                <field name="care_needed"/>
+                                <field name="care_date" attrs="{'invisible': [('care_needed', '=', False)]}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Order Lines" name="order_lines">
+                                <field name="order_line_ids">
+                                    <tree editable="bottom">
+                                        <field name="product_id"/>
+                                        <field name="quantity"/>
+                                        <field name="price_unit"/>
+                                        <field name="subtotal" sum="Total"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Feedback" name="feedback">
+                                <field name="feedback_ids">
+                                    <tree>
+                                        <field name="date_feedback"/>
+                                        <field name="feedback_type"/>
+                                        <field name="rating"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Order Search View -->
+        <record id="view_order_search" model="ir.ui.view">
+            <field name="name">customer.management.order.search</field>
+            <field name="model">customer.management.order</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="customer_id"/>
+                    <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                    <filter string="Confirmed" name="confirmed" domain="[('state', '=', 'confirmed')]"/>
+                    <filter string="Done" name="done" domain="[('state', '=', 'done')]"/>
+                    <filter string="Cancelled" name="cancelled" domain="[('state', '=', 'cancelled')]"/>
+                    <filter string="Needs Care" name="care_needed" domain="[('care_needed', '=', True)]"/>
+                    <filter string="Care Due Today" name="care_today" domain="[('care_date', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Customer" name="group_by_customer" context="{'group_by': 'customer_id'}"/>
+                        <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
+                        <filter string="Order Date" name="group_by_date" context="{'group_by': 'date_order'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Order Action -->
+        <record id="action_orders" model="ir.actions.act_window">
+            <field name="name">Orders</field>
+            <field name="res_model">customer.management.order</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first customer order!
+                </p>
+            </field>
+        </record>
+
+        <!-- Customer Orders Action -->
+        <record id="action_customer_orders" model="ir.actions.act_window">
+            <field name="name">Customer Orders</field>
+            <field name="res_model">customer.management.order</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('customer_id', '=', active_id)]</field>
+            <field name="context">{'default_customer_id': active_id}</field>
+        </record>
+    </odoo>
+</odoo>
